@@ -28,10 +28,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('BE/**/*.gradle') }} # 경로 수정
           restore-keys: ${{ runner.os }}-gradle
+      - name: Change permissions of gradlew
+        run: chmod +x finfarm-backend/gradlew
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        working-directory: ./BE  # 작업 디렉토리 변경
         run: ./gradlew build sonar --info
